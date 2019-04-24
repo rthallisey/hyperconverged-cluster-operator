@@ -5,19 +5,77 @@ metadata:
   namespace: placeholder
   annotations:
     capabilities: "Full Lifecycle"
-    categories: "Virtualization"
-    alm-examples: |
+    categories: "OpenShift Optional"
+    certified: "false"
+    support: "false"
+    containerImage: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-7
+    repository: https://github.com/kubevirt/hyperconverged-cluster-operator
+    createdAt: 2019-04-17T16:01:59Z
+    alm-examples: >-
       [
         {
-          "apiVersion":"hco.kubevirt.io/v1alpha1",
-          "kind":"HyperConverged",
+          "apiVersion": "hco.kubevirt.io/v1alpha1",
+          "kind": "HyperConverged",
           "metadata": {
-            "name":"kubevirt-hyperconverged",
-            "namespace":"kubevirt-hyperconverged"
-          },
-          "spec": {
-            "CDIImagePullPolicy":"IfNotPresent",
-            "KubeVirtImagePullPolicy":"IfNotPresent"
+            "name": "kubevirt-hyperconverged",
+            "namespace": "kubevirt-hyperconverged"
+          }
+        },
+        {
+          "apiVersion": "cdi.kubevirt.io/v1alpha1",
+          "kind": "CDI",
+          "metadata": {
+            "name": "cdi"
+          }
+        },
+        {
+          "apiVersion": "kubevirt.io/v1alpha3",
+          "kind": "KubeVirt",
+          "metadata": {
+            "name": "kubevirt",
+            "namespace": "kubevirt"
+          }
+        },
+        {
+          "apiVersion": "networkaddonsoperator.network.kubevirt.io/v1alpha1",
+          "kind": "NetworkAddonsConfig",
+          "metadata": {
+            "name": "network-addons"
+          }
+        },
+        {
+          "apiVersion": "kwebuis.kubevirt.io/v1alpha1",
+          "kind": "KWebUI",
+          "metadata": {
+            "name": "web-ui"
+          }
+        },
+        {
+          "apiVersion": "kubevirtcommontemplatesbundles.kubevirt.io/v1",
+          "kind": "KubevirtCommonTemplatesBundle",
+          "metadata": {
+            "name": "common-templates"
+          }
+        },
+        {
+          "apiVersion": "kubevirtnodelabellerbundles.kubevirt.io/v1",
+          "kind": "KubevirtNodeLabellerBundle",
+          "metadata": {
+            "name": "node-labeller"
+          }
+        },
+        {
+          "apiVersion": "kubevirttemplatevalidators.kubevirt.io/v1",
+          "kind": "KubevirtTemplateValidator",
+          "metadata": {
+            "name": "template-validator"
+          }
+        },
+        {
+          "apiVersion": "nodemaintenances.kubevirt.io/v1alpha1",
+          "kind": "NodeMaintenance",
+          "metadata": {
+            "name": "node-maintenance"
           }
         }
       ]
@@ -776,6 +834,186 @@ spec:
               verbs:
               - '*'
 
+        - serviceAccountName: kubevirt-web-ui-operator
+          rules:
+            - apiGroups:
+              - oauth.openshift.io
+              - apiextensions.k8s.io
+              resources:
+              - '*'
+              verbs:
+              - '*'
+            - apiGroups:
+              - ""
+              resources:
+              - configmaps
+              verbs:
+              - '*'
+
+        - serviceAccountName: kubevirt-ssp-operator
+          rules:
+          - apiGroups:
+            - oauth.openshift.io
+            - template.openshift.io
+            resources:
+            - '*'
+            verbs:
+            - '*'
+          - apiGroups:
+            - rbac.authorization.k8s.io
+            resources:
+            - clusterroles
+            verbs:
+            - create
+            - get
+            - patch
+            - list
+          - apiGroups:
+            - rbac.authorization.k8s.io
+            resources:
+            - clusterrolebindings
+            verbs:
+            - create
+            - get
+            - list
+            - watch
+            - patch
+          - apiGroups:
+            - extensions
+            - apps
+            resources:
+            - deployments
+            - replicasets
+            verbs:
+            - create
+            - get
+            - patch
+            - list
+          - apiGroups:
+            - apps
+            resources:
+            - daemonsets
+            verbs:
+            - create
+            - get
+            - patch
+          - apiGroups:
+            - ""
+            resources:
+            - serviceaccounts
+            verbs:
+            - create
+            - get
+            - patch
+          - apiGroups:
+            - ""
+            resources:
+            - pods
+            - configmaps
+            - nodes
+            verbs:
+            - create
+            - get
+            - patch
+            - update
+          - apiGroups:
+            - ""
+            resources:
+            - services
+            verbs:
+            - list
+            - get
+            - create
+            - patch
+          - apiGroups:
+            - admissionregistration.k8s.io
+            resources:
+            - validatingwebhookconfigurations
+            verbs:
+            - create
+            - get
+            - list
+            - patch
+            - watch
+          - apiGroups:
+            - security.openshift.io
+            resources:
+            - securitycontextconstraints
+            verbs:
+            - '*'
+            resourceName:
+            - privileged
+
+        - serviceAccountName: node-maintenance-operator
+          rules:
+          - apiGroups:
+            - ""
+            resources:
+            - services
+            - endpoints
+            - events
+            - configmaps
+            - serviceaccounts
+            verbs:
+            - '*'
+          - apiGroups:
+            - ""
+            resources:
+            - nodes
+            verbs:
+            - get
+            - list
+            - update
+            - patch
+            - watch
+          - apiGroups:
+            - ""
+            resources:
+            - pods
+            verbs:
+            - get
+            - list
+            - watch
+          - apiGroups:
+            - ""
+            resources:
+            - pods/eviction
+            verbs:
+            - create
+          - apiGroups:
+            - ""
+            resources:
+            - namespaces
+            verbs:
+            - get
+          - apiGroups:
+            - apps
+            resources:
+            - deployments
+            - daemonsets
+            - replicasets
+            - statefulsets
+            verbs:
+            - '*'
+          - apiGroups:
+            - monitoring.coreos.com
+            resources:
+            - servicemonitors
+            verbs:
+            - get
+            - create
+          - apiGroups:
+            - kubevirt.io
+            resources:
+            - '*'
+            verbs:
+            - '*'
+          - apiGroups:
+            - oauth.openshift.io
+            resources:
+            - '*'
+            verbs:
+            - '*'
 
       deployments:
         - name: hco-operator
@@ -795,7 +1033,7 @@ spec:
                   - hyperconverged-cluster-operator
                   env:
                   - name: OPERATOR_IMAGE
-                    value: rthallisey/hyperconverged-cluster-operator:latest
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-7
                   - name: OPERATOR_NAME
                     value: hyperconverged-cluster-operator
                   - name: POD_NAME
@@ -806,7 +1044,7 @@ spec:
                     valueFrom:
                       fieldRef:
                         fieldPath: metadata.namespace
-                  image: rthallisey/hyperconverged-cluster-operator:latest
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-7
                   imagePullPolicy: Always
                   name: hyperconverged-cluster-operator
                   resources: {}
@@ -839,12 +1077,12 @@ spec:
                   - "2"
                   env:
                   - name: OPERATOR_IMAGE
-                    value: kubevirt/virt-operator:latest
+                    value: container-native-virtualization/virt-operator:v2.0.0-21
                   - name: WATCH_NAMESPACE
                     valueFrom:
                       fieldRef:
                         fieldPath: metadata.annotations['olm.targetNamespaces']
-                  image: kubevirt/virt-operator:latest
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/virt-operator:v2.0.0-21
                   imagePullPolicy: IfNotPresent
                   name: virt-operator
                   ports:
@@ -878,9 +1116,9 @@ spec:
                 containers:
                 - env:
                   - name: OPERATOR_IMAGE
-                    value: kubevirt/cdi-operator:v1.7.0
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/virt-cdi-operator:v2.0.0-4
                   - name: OPERATOR_NAME
-                    value: cdi-operator
+                    value: virt-cdi-operator
                   - name: POD_NAME
                     valueFrom:
                       fieldRef:
@@ -892,26 +1130,26 @@ spec:
                   - name: DEPLOY_CLUSTER_RESOURCES
                     value: "true"
                   - name: DOCKER_REPO
-                    value: kubevirt
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization
                   - name: DOCKER_TAG
-                    value: v1.7.0
+                    value: v2.0.0
                   - name: CONTROLLER_IMAGE
-                    value: cdi-controller
+                    value: virt-cdi-controller
                   - name: IMPORTER_IMAGE
-                    value: cdi-importer
+                    value: virt-cdi-importer
                   - name: CLONER_IMAGE
-                    value: cdi-cloner
+                    value: virt-cdi-cloner
                   - name: APISERVER_IMAGE
-                    value: cdi-apiserver
+                    value: virt-cdi-apiserver
                   - name: UPLOAD_PROXY_IMAGE
-                    value: cdi-uploadproxy
+                    value: virt-cdi-uploadproxy
                   - name: UPLOAD_SERVER_IMAGE
-                    value: cdi-uploadserver
+                    value: virt-cdi-uploadserver
                   - name: VERBOSITY
                     value: "1"
                   - name: PULL_POLICY
                     value: IfNotPresent
-                  image: kubevirt/cdi-operator:v1.7.0
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/virt-cdi-operator:v2.0.0-4
                   imagePullPolicy: Always
                   name: cdi-operator
                   ports:
@@ -936,22 +1174,22 @@ spec:
                 containers:
                 - env:
                   - name: MULTUS_IMAGE
-                    value: docker.io/nfvpe/multus:latest
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/openshift/ose-multus-cni:v4.1.0-201904211700
                   - name: LINUX_BRIDGE_IMAGE
-                    value: quay.io/kubevirt/cni-default-plugins:latest
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/ovs-cni-plugin-container:v2.0.0-7
                   - name: SRIOV_DP_IMAGE
-                    value: quay.io/booxter/sriov-device-plugin:latest
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/sriov-network-device-plugin-container:v2.0.0-3
                   - name: SRIOV_CNI_IMAGE
-                    value: docker.io/nfvpe/sriov-cni:latest
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/sriov-cni-container:v2.0.0-3
                   - name: SRIOV_ROOT_DEVICES
                   - name: SRIOV_NETWORK_NAME
                     value: sriov-network
                   - name: SRIOV_NETWORK_TYPE
-                    value: sriov
+                    value: cnv-sriov
                   - name: KUBEMACPOOL_IMAGE
-                    value: quay.io/kubevirt/kubemacpool:v0.2.0
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/kubemacpool:v2.0.0-2
                   - name: OPERATOR_IMAGE
-                    value: quay.io/kubevirt/cluster-network-addons-operator:0.5.0
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/cluster-network-addons-operator:v2.0.0-11
                   - name: OPERATOR_NAME
                     value: cluster-network-addons-operator
                   - name: OPERATOR_NAMESPACE
@@ -963,11 +1201,121 @@ spec:
                       fieldRef:
                         fieldPath: metadata.name
                   - name: WATCH_NAMESPACE
-                  image: quay.io/kubevirt/cluster-network-addons-operator:0.5.0
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/cluster-network-addons-operator:v2.0.0-11
                   imagePullPolicy: IfNotPresent
                   name: cluster-network-addons-operator
                   resources: {}
                 serviceAccountName: cluster-network-addons-operator
+
+        - name: kubevirt-web-ui-operator
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                name: kubevirt-web-ui-operator
+            strategy: {}
+            template:
+              metadata:
+                labels:
+                  name: kubevirt-web-ui-operator
+              spec:
+                containers:
+                - env:
+                  - name: OPERATOR_NAME
+                    value: kubevirt-web-ui-operator
+                  - name: OPERATOR_NAMESPACE
+                    valueFrom:
+                      fieldRef:
+                        fieldPath: metadata.namespace
+                  - name: POD_NAME
+                    valueFrom:
+                      fieldRef:
+                        fieldPath: metadata.name
+                  - name: WATCH_NAMESPACE
+                    valueFrom:
+                      fieldRef:
+                        fieldPath: metadata.namespace
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/kubevirt-web-ui-operator:v2.0.0-11.1
+                  imagePullPolicy: IfNotPresent
+                  name: kubevirt-web-ui-operator
+                  ports:
+                  - containerPort: 60000
+                    name: metrics
+                    protocol: TCP
+                  readinessProbe:
+                    exec:
+                      command:
+                      - stat
+                      - /tmp/operator-sdk-ready
+                    failureThreshold: 1
+                    initialDelaySeconds: 4
+                    periodSeconds: 10
+                  resources: {}
+                serviceAccountName: kubevirt-web-ui-operator
+
+        - name: kubevirt-ssp-operator
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                name: kubevirt-ssp-operator
+            template:
+              metadata:
+                labels:
+                  name: kubevirt-ssp-operator
+              spec:
+                serviceAccountName: kubevirt-ssp-operator
+                containers:
+                  - name: kubevirt-ssp-operator
+                    image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/kubevirt-ssp-operator:v2.0.0-6
+                    ports:
+                    - containerPort: 60000
+                      name: metrics
+                    imagePullPolicy: Always
+                    env:
+                      - name: WATCH_NAMESPACE
+                        valueFrom:
+                          fieldRef:
+                            fieldPath: metadata.namespace
+                      - name: OPERATOR_NAME
+                        value: "kubevirt-ssp-operator"
+
+        - name: node-maintenance-operator
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                name: node-maintenance-operator
+            strategy: {}
+            template:
+              metadata:
+                labels:
+                  name: node-maintenance-operator
+              spec:
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: node-role.kubernetes.io/master
+                          operator: Exists
+                containers:
+                - env:
+                  - name: WATCH_NAMESPACE
+                  - name: POD_NAME
+                    valueFrom:
+                      fieldRef:
+                        fieldPath: metadata.name
+                  - name: OPERATOR_NAME
+                    value: node-maintenance-operator
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/node-maintenance-operator-container:v2.0.0-2
+                  imagePullPolicy: Always
+                  name: node-maintenance-operator
+                  resources: {}
+                serviceAccountName: node-maintenance-operator
+                tolerations:
+                - effect: NoSchedule
+                  key: node-role.kubernetes.io/master
 
 
   customresourcedefinitions:
@@ -993,3 +1341,28 @@ spec:
         kind: NetworkAddonsConfig
         displayName: Cluster Network Addons
         description: Cluster Network Addons
+      - name: kwebuis.kubevirt.io
+        version: v1alpha1
+        kind: KWebUI
+        displayName: Web User Interface
+        description: KubeVirt Web User Interface
+      - name: kubevirtcommontemplatesbundles.kubevirt.io
+        version: v1
+        kind: KubevirtCommonTemplatesBundle
+        displayName: KubeVirt Common Templates
+        description: KubeVirt Common Templates
+      - name: kubevirtnodelabellerbundles.kubevirt.io
+        version: v1
+        kind: KubevirtNodeLabellerBundle
+        displayName: KubeVirt Node Labeller Bundler
+        description: KubeVirt Node Labeller Bundler
+      - name: kubevirttemplatevalidators.kubevirt.io
+        version: v1
+        kind: KubevirtTemplateValidator
+        displayName: KubeVirt Template Validator
+        description: KubeVirt Template Validator
+      - name: nodemaintenances.kubevirt.io
+        version: v1alpha1
+        kind: NodeMaintenance
+        displayName: Node Maintenance
+        description: Node Maintenance
