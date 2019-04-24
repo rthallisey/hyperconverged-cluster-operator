@@ -23,7 +23,7 @@ metadata:
   namespace: openshift-operator-lifecycle-manager
 spec:
   sourceType: grpc
-  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-4
+  image: quay.io/tiraboschi/hco-registry:qe-1.1
   displayName: KubeVirt HyperConverged
   publisher: Red Hat
 EOF
