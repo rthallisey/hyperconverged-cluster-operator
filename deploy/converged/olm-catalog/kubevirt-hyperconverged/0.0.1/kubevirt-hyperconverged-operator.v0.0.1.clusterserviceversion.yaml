@@ -1267,7 +1267,7 @@ spec:
                 serviceAccountName: kubevirt-ssp-operator
                 containers:
                   - name: kubevirt-ssp-operator
-                    image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/kubevirt-ssp-operator:v2.0.0-6
+                    image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/kubevirt-ssp-operator:v2.0.0-7
                     ports:
                     - containerPort: 60000
                       name: metrics

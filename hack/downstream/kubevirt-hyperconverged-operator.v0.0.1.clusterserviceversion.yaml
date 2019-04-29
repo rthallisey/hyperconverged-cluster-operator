@@ -8,7 +8,7 @@ metadata:
     categories: "OpenShift Optional"
     certified: "false"
     support: "false"
-    containerImage: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-5
+    containerImage: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-7
     repository: https://github.com/kubevirt/hyperconverged-cluster-operator
     createdAt: 2019-04-17T16:01:59Z
     alm-examples: >-
@@ -69,6 +69,13 @@ metadata:
           "kind": "KubevirtTemplateValidator",
           "metadata": {
             "name": "template-validator"
+          }
+        },
+        {
+          "apiVersion": "nodemaintenances.kubevirt.io/v1alpha1",
+          "kind": "NodeMaintenance",
+          "metadata": {
+            "name": "node-maintenance"
           }
         }
       ]
@@ -1026,7 +1033,7 @@ spec:
                   - hyperconverged-cluster-operator
                   env:
                   - name: OPERATOR_IMAGE
-                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-5
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-7
                   - name: OPERATOR_NAME
                     value: hyperconverged-cluster-operator
                   - name: POD_NAME
@@ -1037,7 +1044,7 @@ spec:
                     valueFrom:
                       fieldRef:
                         fieldPath: metadata.namespace
-                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-5
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-7
                   imagePullPolicy: Always
                   name: hyperconverged-cluster-operator
                   resources: {}
@@ -1123,7 +1130,7 @@ spec:
                   - name: DEPLOY_CLUSTER_RESOURCES
                     value: "true"
                   - name: DOCKER_REPO
-                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization
                   - name: DOCKER_TAG
                     value: v2.0.0
                   - name: CONTROLLER_IMAGE
@@ -1194,7 +1201,7 @@ spec:
                       fieldRef:
                         fieldPath: metadata.name
                   - name: WATCH_NAMESPACE
-                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/cluster-network-addons-operator:v2.0.0-10
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/cluster-network-addons-operator:v2.0.0-11
                   imagePullPolicy: IfNotPresent
                   name: cluster-network-addons-operator
                   resources: {}
@@ -1260,7 +1267,7 @@ spec:
                 serviceAccountName: kubevirt-ssp-operator
                 containers:
                   - name: kubevirt-ssp-operator
-                    image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/kubevirt-ssp-operator:v2.0.0-6
+                    image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/kubevirt-ssp-operator:v2.0.0-7
                     ports:
                     - containerPort: 60000
                       name: metrics
@@ -1275,40 +1282,41 @@ spec:
 
         - name: node-maintenance-operator
           spec:
-          replicas: 1
-          selector:
-            matchLabels:
-              name: node-maintenance-operator
-          strategy: {}
-          template:
-            metadata:
-              labels:
+            replicas: 1
+            selector:
+              matchLabels:
                 name: node-maintenance-operator
-            spec:
-              affinity:
-                nodeAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
-                    nodeSelectorTerms:
-                    - matchExpressions:
-                      - key: node-role.kubernetes.io/master
-                        operator: Exists
-              containers:
-              - env:
-                - name: WATCH_NAMESPACE
-                - name: POD_NAME
-                  valueFrom:
-                    fieldRef:
-                      fieldPath: metadata.name
-                - name: OPERATOR_NAME
-                  value: node-maintenance-operator
-                image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/node-maintenance-operator-container:v2.0.0-2
-                imagePullPolicy: Always
-                name: node-maintenance-operator
-                resources: {}
-              serviceAccountName: node-maintenance-operator
-              tolerations:
-              - effect: NoSchedule
-                key: node-role.kubernetes.io/master
+            strategy: {}
+            template:
+              metadata:
+                labels:
+                  name: node-maintenance-operator
+              spec:
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: node-role.kubernetes.io/master
+                          operator: Exists
+                containers:
+                - env:
+                  - name: WATCH_NAMESPACE
+                  - name: POD_NAME
+                    valueFrom:
+                      fieldRef:
+                        fieldPath: metadata.name
+                  - name: OPERATOR_NAME
+                    value: node-maintenance-operator
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/node-maintenance-operator-container:v2.0.0-2
+                  imagePullPolicy: Always
+                  name: node-maintenance-operator
+                  resources: {}
+                serviceAccountName: node-maintenance-operator
+                tolerations:
+                - effect: NoSchedule
+                  key: node-role.kubernetes.io/master
+
 
   customresourcedefinitions:
     owned:
@@ -1353,3 +1361,8 @@ spec:
         kind: KubevirtTemplateValidator
         displayName: KubeVirt Template Validator
         description: KubeVirt Template Validator
+      - name: nodemaintenances.kubevirt.io
+        version: v1alpha1
+        kind: NodeMaintenance
+        displayName: Node Maintenance
+        description: Node Maintenance
