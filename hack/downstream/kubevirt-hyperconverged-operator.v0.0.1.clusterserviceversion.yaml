@@ -8,7 +8,7 @@ metadata:
     categories: "OpenShift Optional"
     certified: "false"
     support: "false"
-    containerImage: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-7
+    containerImage: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-8
     repository: https://github.com/kubevirt/hyperconverged-cluster-operator
     createdAt: 2019-04-17T16:01:59Z
     alm-examples: >-
@@ -1033,7 +1033,7 @@ spec:
                   - hyperconverged-cluster-operator
                   env:
                   - name: OPERATOR_IMAGE
-                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-7
+                    value: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-8
                   - name: OPERATOR_NAME
                     value: hyperconverged-cluster-operator
                   - name: POD_NAME
@@ -1044,7 +1044,7 @@ spec:
                     valueFrom:
                       fieldRef:
                         fieldPath: metadata.namespace
-                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-7
+                  image: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/container-native-virtualization/hyperconverged-cluster-operator:v2.0.0-8
                   imagePullPolicy: Always
                   name: hyperconverged-cluster-operator
                   resources: {}
