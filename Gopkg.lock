@@ -11,8 +11,7 @@
   name = "github.com/MarSik/kubevirt-ssp-operator"
   packages = [
     "pkg/apis",
-    "pkg/apis/kubevirt/v1",
-    "pkg/versions"
+    "pkg/apis/kubevirt/v1"
   ]
   revision = "0353c03465f6bcdc0fe42a10d655e8280ed091c4"
   version = "v1.0.1"
@@ -224,6 +223,18 @@
   version = "v0.5.1"
 
 [[projects]]
+  name = "github.com/hpcloud/tail"
+  packages = [
+    ".",
+    "ratelimiter",
+    "util",
+    "watch",
+    "winfile"
+  ]
+  revision = "a30252cb686a21eb2d0b98132633053ec2f7f1e5"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/imdario/mergo"
   packages = ["."]
   revision = "7c29201646fa3de8506f701213473dd407f19646"
@@ -267,8 +278,11 @@
     "pkg/components",
     "pkg/names"
   ]
-  revision = "4b8a15d62cee1a8953d967c6641acaae0558bcce"
-  version = "0.7.0"
+
+[[projects]]
+
+  revision = "02e17a1e1bc426f8d00cace60b03ecc90eadff4a"
+  version = "0.9.0"
 
 [[projects]]
   name = "github.com/kubevirt/hyperconverged-cluster-operator"
@@ -279,8 +293,8 @@
     "pkg/controller",
     "pkg/controller/hyperconverged"
   ]
-  revision = "635a71af855d4de76f5fce67129248cf92ed0077"
-  version = "v0.2"
+  revision = "bd774f762bf8e8d39b5d6de8bbe16ae4cc9d60bc"
+  version = "v0.2.1"
 
 [[projects]]
   name = "github.com/kubevirt/web-ui-operator"
@@ -325,6 +339,31 @@
   packages = ["."]
   revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
   version = "1.0.1"
+
+[[projects]]
+  name = "github.com/onsi/ginkgo"
+  packages = [
+    ".",
+    "config",
+    "internal/codelocation",
+    "internal/containernode",
+    "internal/failer",
+    "internal/leafnodes",
+    "internal/remote",
+    "internal/spec",
+    "internal/spec_iterator",
+    "internal/specrunner",
+    "internal/suite",
+    "internal/testingtproxy",
+    "internal/writer",
+    "reporters",
+    "reporters/stenographer",
+    "reporters/stenographer/support/go-colorable",
+    "reporters/stenographer/support/go-isatty",
+    "types"
+  ]
+  revision = "eea6ad008b96acdaa524f5b409513bf062b500ad"
+  version = "v1.8.0"
 
 [[projects]]
   name = "github.com/onsi/gomega"
@@ -597,10 +636,23 @@
   version = "v1.5.0"
 
 [[projects]]
+  name = "gopkg.in/fsnotify.v1"
+  packages = ["."]
+  revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
+  source = "https://github.com/fsnotify/fsnotify/archive/v1.4.7.tar.gz"
+  version = "v1.4.7"
+
+[[projects]]
   name = "gopkg.in/inf.v0"
   packages = ["."]
   revision = "d2d2541c53f18d2a059457998ce2876cc8e67cbf"
   version = "v0.9.1"
+
+[[projects]]
+  branch = "v1"
+  name = "gopkg.in/tomb.v1"
+  packages = ["."]
+  revision = "dd632973f1e7218eb1089048e0798ec9ae7dceb8"
 
 [[projects]]
   name = "gopkg.in/yaml.v2"
@@ -943,8 +995,8 @@
     "pkg/operator/resources/operator",
     "pkg/operator/resources/utils"
   ]
-  revision = "52e7187df6a915975493bd452987cf9380efa9f6"
-  version = "v1.9.1"
+  revision = "dd3d5d75fece6c7f12483c4561cbc5cdfa717a00"
+  version = "v1.9.2"
 
 [[projects]]
   name = "kubevirt.io/kubevirt"
@@ -1035,6 +1087,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5995d3655e345554207e24ca9333d58f235179a79ef5c6f7064fa5ea8ff19fde"
+  inputs-digest = "508567c88d04aa7499fdb52dc5e38fd46b6db41deaee5c0a16e46fad77977502"
   solver-name = "gps-cdcl"
   solver-version = 1
